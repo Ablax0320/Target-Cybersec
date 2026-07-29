@@ -1,925 +1,536 @@
-<meta name="google-site-verification" content="PuIlt6tGMidOYYBHdiLzX059ZBm9M67M-j0TbtM8CuQ" />
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Skills School | IT Mutaxassislik Markazi</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <style>
-        /* ========== ASOSIY STILLAR ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-            background: #0a0a2a;
-            color: #fff;
-        }
-
-        /* Canvas to'liq ekran */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            display: block;
-        }
-
-        canvas {
-            display: block !important;
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        /* ========== 1-SAHIFA ========== */
-        .hero-section {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            z-index: 10;
-            overflow: hidden;
-        }
-
-        .content {
-            position: relative;
-            z-index: 20;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 30px 50px;
-        }
-/* ========== IJITIMOIY TARMOQLAR (chap pastki) ========== */
-.social-links {
-    position: fixed;
-    bottom: 35px;
-    left: 45px;
-    z-index: 30;
-    display: flex;
-    gap: 18px;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    padding: 12px 22px;
-    border-radius: 60px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    animation: fadeInUp 0.8s ease;
-}
-
-.social-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    color: #fff;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    background: rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-}
-
-/* Instagram */
-.social-icon.instagram {
-    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-}
-.social-icon.instagram:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 0 20px rgba(225, 48, 108, 0.6);
-}
-
-/* Telegram */
-.social-icon.telegram {
-    background: linear-gradient(135deg, #0088cc, #004c6e);
-}
-.social-icon.telegram:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 0 20px rgba(0, 136, 204, 0.6);
-}
-
-/* YouTube */
-.social-icon.youtube {
-    background: linear-gradient(135deg, #ff0000, #cc0000);
-}
-.social-icon.youtube:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-}
-
-.social-icon i {
-    transition: all 0.3s ease;
-}
-
-.social-icon:hover i {
-    transform: scale(1.1);
-}
-      /* ========== LOGOTIP (aylana shaklida + katta) ========== */
-.logo {
-    position: fixed;
-    top: 30px;
-    left: 40px;
-    z-index: 30;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(15px);
-    padding: 12px 35px 12px 15px;
-    border-radius: 80px;
-    border: 1px solid rgba(0, 255, 255, 0.5);
-    animation: float 3s ease-in-out infinite;
-}
-
-.logo-icon {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;  /* AYLANA! to'rtburchak emas */
-    overflow: hidden;
-    background: linear-gradient(135deg, #00ffff, #ff00ff);
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#logo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;  /* AYLANA! */
-}
-
-.logo-text {
-    font-family: 'Orbitron', monospace;
-    font-size: 32px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #fff, #00ffff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.logo-text span {
-    background: linear-gradient(135deg, #ff00ff, #ffff00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-        /* MARKAZIY TITLE */
-        .center-title {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 25;
-            width: 100%;
-        }
-
-        .main-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 110px;
-            font-weight: 900;
-            letter-spacing: 8px;
-            background: linear-gradient(135deg, #00ffff, #ff00ff, #ffff00, #00ff00);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 5s ease infinite;
-        }
-
-        .subtitle {
-            font-size: 32px;
-            letter-spacing: 6px;
-            margin-top: 25px;
-            color: #fff;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
-
-        .typing-text {
-            font-size: 22px;
-            margin-top: 40px;
-            color: #00ffff;
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 3px;
-            background: #00ffff;
-            margin-left: 5px;
-            animation: blink 1s infinite;
-        }
-
-        .hero-buttons {
-            margin-top: 50px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #00ffff, #ff00ff);
-            border: none;
-            padding: 14px 40px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
-
-        .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
-        }
-
-  /* ========== SIZNING RASMINGIZ (kattaroq) ========== */
-.owner-section {
-    position: fixed;
-    bottom: 40px;
-    right: 50px;
-    z-index: 30;
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(15px);
-    padding: 15px 35px 15px 15px;
-    border-radius: 120px;
-    border: 1px solid rgba(0, 255, 255, 0.5);
-    animation: slideInRight 1s ease;
-}
-
-.owner-image {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #00ffff, #ff00ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: pulseRing 2s ease-in-out infinite;
-    overflow: hidden;
-    padding: 5px;
-}
-
-#owner-img {
-    width: 170px;
-    height: 170px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #fff;
-}
-
-.owner-info {
-    text-align: right;
-}
-
-.owner-name {
-    font-size: 24px;
-    color: #00ffff;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-.owner-title {
-    font-size: 16px;
-    opacity: 0.9;
-    letter-spacing: 1px;
-}
-
-        /* SCROLL INDICATOR */
-        .scroll-indicator {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 30;
-            text-align: center;
-            animation: bounce 2s infinite;
-            cursor: pointer;
-        }
-
-        .scroll-indicator span {
-            display: block;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .scroll-indicator i {
-            font-size: 22px;
-            color: #00ffff;
-        }
-
-        /* ========== 2-SAHIFA KURSLAR ========== */
-        .courses-section {
-            position: relative;
-            z-index: 15;
-            background: linear-gradient(180deg, rgba(10, 10, 42, 0.95) 0%, rgba(5, 5, 30, 0.98) 100%);
-            padding: 100px 0;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 30px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-header h2 {
-            font-size: 48px;
-            font-family: 'Orbitron', monospace;
-            margin-bottom: 15px;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #00ffff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .section-header p {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .course-card {
-            background: rgba(20, 20, 50, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 30px;
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            transition: all 0.4s ease;
-            cursor: pointer;
-        }
-
-        .course-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(0, 255, 255, 0.6);
-            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
-        }
-
-        .card-icon {
-            font-size: 48px;
-            color: #00ffff;
-            margin-bottom: 20px;
-        }
-
-        .course-card h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-            font-family: 'Orbitron', monospace;
-        }
-        .course-card {
-    cursor: pointer;  /* qo'l ko'rinishi */
-    transition: all 0.4s ease;
-}
-
-        .course-card p {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .course-meta {
-            display: flex;
-            gap: 20px;
-            font-size: 13px;
-            color: rgba(0, 255, 255, 0.8);
-        }
-
-        .course-meta i {
-            margin-right: 5px;
-        }
-
-        /* Animatsiyalar */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(12px); }
-        }
-
-        @keyframes pulseRing {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.5); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 255, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
-        }
-
-     /* ========== RESPONSIVE (MOBIL) ========== */
-@media (max-width: 768px) {
-    /* Umumiy */
-    .main-title { font-size: 42px; letter-spacing: 3px; }
-    .subtitle { font-size: 16px; letter-spacing: 3px; margin-top: 15px; }
-    .typing-text { font-size: 14px; margin-top: 25px; }
-    .btn-primary { padding: 10px 28px; font-size: 14px; }
-    .hero-buttons { margin-top: 35px; }
-    
-    /* LOGO - chap yuqori */
-    .logo {
-        top: 15px;
-        left: 20px;
-        padding: 8px 18px;
-        gap: 10px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiberxavfsizlik — To‘liq qo‘llanma</title>
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    /* ===== GLOBAL ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .logo-icon {
-        width: 70px;
-        height: 70px;
-    }
-    .logo-text {
-        font-size: 18px;
-    }
-    
-    /* OWNER - o'ng pastki (sizning rasmingiz) */
-    .owner-section {
-        bottom: 20px;
-        right: 20px;
-        padding: 6px 15px 6px 6px;
-        gap: 10px;
-    }
-    .owner-image {
-        width: 120px;
-        height: 120px;
-    }
-    #owner-img {
-        width: 80px;
-        height: 80px;
-    }
-    .owner-name {
-        font-size: 7px;
-    }
-    .owner-title {
-        font-size: 8px;
-    }
-    
-    /* IJTIMOIY TARMOQLAR - chap pastki (owner bilan to'qnashmasligi uchun) */
-    .social-links {
-        bottom: 20px;
-        left: 20px;
-        gap: 10px;
-        padding: 8px 14px;
-    }
-    .social-icon {
-        width: 38px;
-        height: 38px;
-        font-size: 18px;
-    }
-    
-    /* SCROLL INDICATOR - pastda markazda */
-    .scroll-indicator {
-        bottom: 20px;
-    }
-    .scroll-indicator span {
-        font-size: 10px;
-    }
-    .scroll-indicator i {
-        font-size: 16px;
-    }
-    
-    /* KURSLAR BO'LIMI */
-    .section-header h2 {
-        font-size: 28px;
-    }
-    .section-header p {
-        font-size: 14px;
-    }
-    .courses-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    .course-card {
-        padding: 20px;
-    }
-    .course-card h3 {
-        font-size: 18px;
-    }
-    .card-icon {
-        font-size: 36px;
-    }
-}
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
 
-/* ULTRA KICHIK EKRANLAR UCHUN (400px gacha) */
-@media (max-width: 480px) {
-    .owner-section {
-        bottom: 15px;
-        right: 15px;
-        padding: 5px 12px 5px 5px;
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #0a0a0a;
+      color: #00ffc8;
+      overflow-x: hidden;
+      padding: 15px;
     }
-    .owner-image {
-        width: 45px;
-        height: 45px;
+
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.15;
     }
-    #owner-img {
-        width: 40px;
-        height: 40px;
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: rgba(8, 8, 8, 0.82);
+      backdrop-filter: blur(5px);
+      border: 2px solid #00ffc8;
+      box-shadow: 0 0 60px #00ffc866, inset 0 0 60px #00ffc822;
+      border-radius: 35px;
+      padding: 30px 25px;
+      position: relative;
+      z-index: 10;
     }
-    .owner-name {
-        font-size: 9px;
+
+    h1 {
+      font-size: 3.8rem;
+      font-weight: 900;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      color: #00ffc8;
+      text-shadow: 0 0 30px #00ffc8, 0 0 80px #008f6b;
+      animation: glitch 2.2s infinite;
+      word-break: break-word;
     }
-    .owner-title {
-        font-size: 7px;
+    @keyframes glitch {
+      0%, 100% { opacity: 1; text-shadow: 0 0 30px #00ffc8; }
+      2% { opacity: 0.3; transform: translateX(-5px); text-shadow: 0 0 60px #ff3b3b; }
+      4% { opacity: 0.9; transform: translateX(5px); text-shadow: 0 0 60px #3b9bff; }
+      6% { opacity: 1; transform: translateX(0); text-shadow: 0 0 30px #00ffc8; }
     }
-    
-    .social-links {
-        bottom: 15px;
-        left: 15px;
-        gap: 8px;
-        padding: 6px 10px;
+
+    .subhead {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #b0f0e0;
+      border-bottom: 2px solid #00ffc880;
+      padding-bottom: 20px;
+      margin-bottom: 25px;
+      letter-spacing: 4px;
+      font-family: 'Share Tech Mono', monospace;
     }
-    .social-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 15px;
+
+    /* ===== 3D ===== */
+    #three-container {
+      width: 100%;
+      height: 300px;
+      margin: 20px 0 30px;
+      border-radius: 40px;
+      border: 2px solid #00ffc8;
+      background: #030303;
+      box-shadow: inset 0 0 80px #00ffc833, 0 0 50px #00ffc855;
     }
-    
-    .logo {
-        top: 12px;
-        left: 15px;
-        padding: 6px 14px;
+
+    /* ===== BO'LIM SARI ===== */
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 20px #00ffc8;
+      margin: 45px 0 20px;
+      padding-left: 15px;
+      border-left: 8px solid #00ffc8;
+      letter-spacing: 3px;
     }
-    .logo-icon {
-        width: 35px;
-        height: 35px;
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+      margin: 20px 0;
     }
-    .logo-text {
-        font-size: 14px;
+
+    .card {
+      background: #111;
+      border: 2px solid #00ffc8;
+      border-radius: 28px;
+      padding: 22px 18px 28px;
+      text-align: center;
+      transition: 0.3s ease;
+      box-shadow: 0 0 20px #00ffc833;
+      backdrop-filter: blur(2px);
     }
-    
-    .main-title {
-        font-size: 32px;
+    .card:hover {
+      transform: scale(1.02) translateY(-8px);
+      box-shadow: 0 0 60px #00ffc8aa;
+      border-color: #aaffdd;
     }
-    .subtitle {
-        font-size: 12px;
-        letter-spacing: 2px;
+
+    .card .emoji-big {
+      font-size: 4.2rem;
+      display: block;
+      margin-bottom: 8px;
     }
-}
-    </style>
+    .card h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff;
+      text-shadow: 0 0 12px #00ffc8;
+    }
+    .card p {
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #d5f5f0;
+      background: #1a1a1a90;
+      padding: 14px;
+      border-radius: 18px;
+      border-left: 5px solid #00ffc8;
+      text-align: left;
+      font-weight: 300;
+    }
+    .card .badge {
+      display: inline-block;
+      background: #00ffc8;
+      color: #0a0a0a;
+      font-weight: 900;
+      padding: 5px 18px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      margin-top: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* rangli kartalar */
+    .red { border-color: #ff3b3b; box-shadow: 0 0 25px #ff3b3b66; }
+    .red h2 { color: #ff5e5e; text-shadow: 0 0 20px #ff3b3b; }
+    .red .badge { background: #ff3b3b; color: #fff; }
+
+    .blue { border-color: #3b9bff; box-shadow: 0 0 25px #3b9bff66; }
+    .blue h2 { color: #5eb0ff; text-shadow: 0 0 20px #3b9bff; }
+    .blue .badge { background: #3b9bff; color: #fff; }
+
+    .purple { border-color: #b13bff; box-shadow: 0 0 25px #b13bff66; }
+    .purple h2 { color: #c75eff; text-shadow: 0 0 20px #b13bff; }
+    .purple .badge { background: #b13bff; color: #fff; }
+
+    .white-hat { border-color: #e0e0e0; box-shadow: 0 0 25px #ffffff66; }
+    .white-hat h2 { color: #f5f5f5; text-shadow: 0 0 20px #ffffff; }
+
+    .black-hat { border-color: #666; box-shadow: 0 0 25px #aaaaaa66; }
+    .black-hat h2 { color: #ccc; text-shadow: 0 0 20px #aaa; }
+
+    .grey-hat { border-color: #9f9f9f; box-shadow: 0 0 25px #9f9f9f66; }
+    .grey-hat h2 { color: #d0d0d0; text-shadow: 0 0 20px #b0b0b0; }
+
+    /* ===== QO'SHIMCHA BLOKLAR ===== */
+    .info-block {
+      background: #0d0d0d;
+      border: 1px solid #00ffc866;
+      border-radius: 30px;
+      padding: 25px 30px;
+      margin: 25px 0;
+      box-shadow: 0 0 30px #00ffc822;
+    }
+    .info-block h3 {
+      font-size: 1.7rem;
+      color: #fff;
+      text-shadow: 0 0 15px #00ffc8;
+      margin-bottom: 15px;
+    }
+    .info-block ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px 30px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 1.05rem;
+      color: #c0f0e8;
+    }
+    .info-block ul li::before {
+      content: "⚡ ";
+      color: #00ffc8;
+      font-weight: 900;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 1rem;
+      color: #8bcbc0;
+      margin-top: 40px;
+      border-top: 2px solid #00ffc855;
+      padding-top: 30px;
+      letter-spacing: 2px;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    @media (max-width: 700px) {
+      h1 { font-size: 2.4rem; }
+      .container { padding: 15px; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- 3D Canvas -->
-    <div id="canvas-container"></div>
+  <!-- ===== FON MATRITSA ===== -->
+  <canvas id="matrix-canvas"></canvas>
 
-    <!-- 1-SAHIFA -->
-    <section class="hero-section">
-        <div class="content">
-            <div class="logo">
-                <div class="logo-icon">
-                    <img src="Screenshot From 2026-05-13 23-48-25.png" alt="Logo" id="logo-img" onerror="this.src='https://via.placeholder.com/60x60?text=SS'">
-                </div>
-                <div class="logo-text">Skills<span>School</span></div>
-            </div>
+  <div class="container">
+    <h1>⚡ KIBERXAVFSIZLIK ⚡</h1>
+    <div class="subhead">Red · Blue · Purple · White · Black · Grey &nbsp;|&nbsp; Hujum · Himoya · Axloq</div>
 
-            <div class="center-title">
-                <h1 class="main-title">SKILLS SCHOOL</h1>
-                <p class="subtitle">IT MUTAXASSISLIK MARKAZI</p>
-                <div class="typing-text">
-                    <span id="typed-text"></span><span class="cursor">|</span>
-                </div>
-                <div class="hero-buttons">
-                    <button class="btn-primary" onclick="scrollToCourses()">Kurslarni ko'rish <i class="fas fa-arrow-right"></i></button>
-                </div>
-            </div>
+    <!-- 3D SAHNA -->
+    <div id="three-container"></div>
 
-            <div class="owner-section">
-                <div class="owner-image">
-                    <img src="Screenshot From 2026-05-13 23-50-26.png" alt="Owner" id="owner-img" onerror="this.src='https://via.placeholder.com/64x64?text=M'">
-                </div>
-                <div class="owner-info">
-                    <div class="owner-name">Musulmonov Mamarajab</div>
-                    <div class="owner-title">Kiberxavsizlik mutaxasisi</div>
-                </div>
-            </div>
-<!-- Ijtimoiy tarmoqlar (chap pastki) -->
-<div class="social-links">
-    <a href="https://www.instagram.com/skills.schools/" target="_blank" class="social-icon instagram">
-        <i class="fab fa-instagram"></i>
-    </a>
-    <a href="https://t.me/skills_scho?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnba9vSoEaMsgEBo3hdFFgpCJJWHxVngkZz63bVcyGiHm8oNYrlA4iknbNUU0_aem_0Oo8z5Dx_biyGKl9qF-HEg" target="_blank" class="social-icon telegram">
-        <i class="fab fa-telegram-plane"></i>
-    </a>
-    <a href="https://www.youtube.com/@skills_school_uz" target="_blank" class="social-icon youtube">
-        <i class="fab fa-youtube"></i>
-    </a>
-</div>
-            <div class="scroll-indicator" onclick="scrollToCourses()">
-                <span>scroll down</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-        </div>
-    </section>
+    <!-- ========================================= -->
+    <!-- 1) JAMOALAR (Red / Blue / Purple)        -->
+    <!-- ========================================= -->
+    <div class="section-title">🔰 JAMOALAR (TEAMLAR)</div>
+    <div class="grid-4">
+      <div class="card red">
+        <span class="emoji-big">🔴</span>
+        <h2>RED TEAM</h2>
+        <p><strong>Hujumchi ko‘z</strong> — real hujumlar (penetratsiya testi) orqali zaifliklarni topadi. Tizimni “buzish” orqali xavfsizlikni tekshiradi.</p>
+        <span class="badge">Offensive</span>
+      </div>
+      <div class="card blue">
+        <span class="emoji-big">🔵</span>
+        <h2>BLUE TEAM</h2>
+        <p><strong>Himoyachi</strong> — tizimni kuzatadi, xujumlarni aniqlaydi (IDS/IPS), loglarni tahlil qiladi va oldini oladi.</p>
+        <span class="badge">Defensive</span>
+      </div>
+      <div class="card purple">
+        <span class="emoji-big">🟣</span>
+        <h2>PURPLE TEAM</h2>
+        <p><strong>Red + Blue</strong> uyg‘unligi. Hujum va himoyani birlashtirib, jamoalar o‘rtasida aloqa o‘rnatadi. Samarali xavfsizlik siri.</p>
+        <span class="badge">Collaborative</span>
+      </div>
+    </div>
 
-    <!-- 2-SAHIFA: KURSLAR -->
-    <section id="courses-section" class="courses-section">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <h2>Bizning <span class="gradient-text">Mutaxassisliklar</span></h2>
-                <p>Zamonaviy IT sohasining 9 ta muhim yo'nalishi</p>
-            </div>
-          <div class="courses-grid">
-    <!-- 1. Computer Science -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="100" onclick="window.location.href='fanlar/computer.html'">
-        <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
-        <h3>Computer Science</h3>
-        <p>Kompyuter fanining asosiy tushunchalari va nazariyalari</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 14 hafta</span><span><i class="fas fa-chart-line"></i> Boshlang'ich</span></div>
+    <!-- ========================================= -->
+    <!-- 2) SHLYAPALI HAKKERLAR                   -->
+    <!-- ========================================= -->
+    <div class="section-title">🎩 SHLYAPALI HAKKERLAR</div>
+    <div class="grid-4">
+      <div class="card white-hat">
+        <span class="emoji-big">⚪</span>
+        <h2>OQ SHLYAPA</h2>
+        <p><strong>“Yaxshi hakker”</strong> — ruxsat bilan tizimlarni sinab, zaifliklarni egalariga xabar qiladi. Qonuniy va axloqiy.</p>
+        <span class="badge">Ethical</span>
+      </div>
+      <div class="card black-hat">
+        <span class="emoji-big">⚫</span>
+        <h2>QORA SHLYAPA</h2>
+        <p><strong>“Yomon hakker”</strong> — ruxsatsiz buzib, maʼlumot o‘g‘irlaydi, zarar yetkazadi. Noqonuniy va xavfli.</p>
+        <span class="badge">Malicious</span>
+      </div>
+      <div class="card grey-hat">
+        <span class="emoji-big">🔘</span>
+        <h2>KULRANG SHLYAPA</h2>
+        <p><strong>Oraliq</strong> — ruxsatsiz kirib, lekin yomonlik qilmaydi. Baʼzan topilmalarini ixtiyoriy ravishda bildiradi. Qonuniy noaniq.</p>
+        <span class="badge">Grey area</span>
+      </div>
     </div>
-    
-    <!-- 2. Windows OS -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="150" onclick="window.location.href='fanlar/windows.html'">
-        <div class="card-icon"><i class="fab fa-windows"></i></div>
-        <h3>Windows OS</h3>
-        <p>Windows operatsion tizimini chuqur o'rganish</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 8 hafta</span><span><i class="fas fa-chart-line"></i> Boshlang'ich</span></div>
-    </div>
-    
-    <!-- 3. Algoritmlar va Dasturlash Asoslari -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="200" onclick="window.location.href='fanlar/algoritm.html'">
-        <div class="card-icon"><i class="fas fa-code-branch"></i></div>
-        <h3>Algoritmlar va Dasturlash Asoslari</h3>
-        <p>Mustahkam algoritm tuzish va problem-solving</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 16 hafta</span><span><i class="fas fa-chart-line"></i> O'rta</span></div>
-    </div>
-    
-    <!-- 4. Dasturlash Asoslari (C++, Python) -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="250" onclick="window.location.href='fanlar/dasturlash.html'">
-        <div class="card-icon"><i class="fas fa-code"></i></div>
-        <h3>Dasturlash Asoslari (C++, Python)</h3>
-        <p>C++ va Python dasturlash tillari</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 20 hafta</span><span><i class="fas fa-chart-line"></i> O'rta</span></div>
-    </div>
-    
-    <!-- 5. Web Dasturlash -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="300" onclick="window.location.href='fanlar/web.html'">
-        <div class="card-icon"><i class="fas fa-globe"></i></div>
-        <h3>Web Dasturlash</h3>
-        <p>HTML, CSS, JavaScript, React</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 18 hafta</span><span><i class="fas fa-chart-line"></i> O'rta</span></div>
-    </div>
-    
-    <!-- 6. Ma'lumotlar Bazasi -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="350" onclick="window.location.href='fanlar/database.html'">
-        <div class="card-icon"><i class="fas fa-database"></i></div>
-        <h3>Ma'lumotlar Bazasi</h3>
-        <p>SQL, MySQL, PostgreSQL</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 12 hafta</span><span><i class="fas fa-chart-line"></i> O'rta</span></div>
-    </div>
-    
-    <!-- 7. Ma'lumotlar Tuzilmasi -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="400" onclick="window.location.href='fanlar/data-structure.html'">
-        <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
-        <h3>Ma'lumotlar Tuzilmasi</h3>
-        <p>Array, Stack, Queue, Tree, Graph</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 16 hafta</span><span><i class="fas fa-chart-line"></i> Murakkab</span></div>
-    </div>
-    
-    <!-- 8. Linux va Ubuntu -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="450" onclick="window.location.href='fanlar/linux.html'">
-        <div class="card-icon"><i class="fab fa-linux"></i></div>
-        <h3>Linux va Ubuntu</h3>
-        <p>Linux tizimlari va terminal komandalari</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 14 hafta</span><span><i class="fas fa-chart-line"></i> O'rta</span></div>
-    </div>
-    
-    <!-- 9. Sistem Administrator -->
-    <div class="course-card" data-aos="flip-left" data-aos-delay="500" onclick="window.location.href='fanlar/system-admin.html'">
-        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
-        <h3>Sistem Administrator</h3>
-        <p>Tizim administratsiyasi va xavfsizlik</p>
-        <div class="course-meta"><span><i class="far fa-clock"></i> 20 hafta</span><span><i class="fas fa-chart-line"></i> Murakkab</span></div>
-    </div>
-</div>
-            
-        </div>
-    </section>
 
-    <!-- Three.js CDN (to'g'ridan-to'g'ri) -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
-            }
+    <!-- ========================================= -->
+    <!-- 3) QO'SHIMCHA: HUJUM TURLARI              -->
+    <!-- ========================================= -->
+    <div class="section-title">💥 KENG TARQALGAN HUJUM TURLARI</div>
+    <div class="info-block">
+      <ul>
+        <li><strong>Phishing</strong> — soxta xabarlar orqali maʼlumot o‘g‘irlash</li>
+        <li><strong>DDoS</strong> — tizimni so‘rovlar bilan to‘ldirib ishdan chiqarish</li>
+        <li><strong>Malware</strong> — zararli dasturlar (virus, trojan, ransomware)</li>
+        <li><strong>Man-in-the-Middle</strong> — aloqani tinglash va o‘zgartirish</li>
+        <li><strong>SQL Injection</strong> — maʼlumotlar bazasiga kirish</li>
+        <li><strong>Zero-day</strong> — hali maʼlum bo‘lmagan zaiflikdan foydalanish</li>
+      </ul>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 4) HIMOYA USULLARI                        -->
+    <!-- ========================================= -->
+    <div class="section-title">🛡️ HIMOYA USULLARI</div>
+    <div class="info-block">
+      <ul>
+        <li><strong>Firewall</strong> — tarmoq trafigini filtrlash</li>
+        <li><strong>Antivirus</strong> — zararli dasturlarni aniqlash va yo‘qotish</li>
+        <li><strong>2FA (Ikki bosqichli autentifikatsiya)</strong> — qo‘shimcha himoya qatlami</li>
+        <li><strong>VPN</strong> — shifrlangan aloqa kanali</li>
+        <li><strong>SIEM</strong> — xavfsizlik hodisalarini boshqarish va tahlil qilish</li>
+        <li><strong>Regular Update</strong> — dasturiy taʼminotni yangilab turish</li>
+      </ul>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 5) AXLOQ VA QONUNIYAT                     -->
+    <!-- ========================================= -->
+    <div class="section-title">⚖️ AXLOQ VA QONUNIYAT</div>
+    <div class="info-block" style="border-color: #ffaa33;">
+      <ul>
+        <li><strong>Oq shlyapa</strong> — qonuniy va axloqiy (ruxsat bilan)</li>
+        <li><strong>Qora shlyapa</strong> — noqonuniy va axloqsiz</li>
+        <li><strong>Kulrang shlyapa</strong> — noaniq, lekin ko‘pincha zararsiz</li>
+        <li><strong>Red/Blue/Purple</strong> — tashkilot ichida qonuniy faoliyat</li>
+        <li><strong>GDPR, HIPAA</strong> — maʼlumotlarni himoya qilish standartlari</li>
+      </ul>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- 6) QISQACHA XULOSA                        -->
+    <!-- ========================================= -->
+    <div class="section-title">🧠 XULOSA</div>
+    <div class="info-block" style="border-color: #ff66ff;">
+      <p style="font-family:'Segoe UI',sans-serif; font-size:1.1rem; color:#d0f5ee; line-height:1.8;">
+        <strong>Kiberxavfsizlik</strong> — bu faqat texnika emas, balki <strong>inson omili</strong>, <strong>axloq</strong> va <strong>doimiy o‘rganish</strong>dir.
+        Har bir jamoa (Red, Blue, Purple) va har bir hakker (oq, qora, kulrang) o‘z rolini o‘ynaydi.
+        <br><br>
+        <span style="color:#00ffc8; font-weight:700;">Esda tut:</span> Eng kuchli himoya — bu <strong>bilim</strong> va <strong>xabardorlik</strong>!
+      </p>
+    </div>
+
+    <div class="footer">
+      🔐 “Kiberxavfsizlik — bu hammamizning mas’uliyatimiz.”  |  3D + Animatsiya  |  © 2026
+    </div>
+  </div>
+
+  <!-- ========================================= -->
+  <!-- JAVASCRIPT                                -->
+  <!-- ========================================= -->
+
+  <script>
+    // ===== 1) MATRITSA FONI =====
+    (function matrix() {
+      const c = document.getElementById('matrix-canvas');
+      const ctx = c.getContext('2d');
+      let w = c.width = window.innerWidth;
+      let h = c.height = window.innerHeight;
+      const chars = "0123456789ABCDEF";
+      const cols = Math.floor(w / 18);
+      const drops = Array(cols).fill(1);
+
+      function draw() {
+        ctx.fillStyle = 'rgba(10, 10, 10, 0.07)';
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#00ffc8';
+        ctx.font = '16px monospace';
+        for (let i = 0; i < drops.length; i++) {
+          const text = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillText(text, i * 18, drops[i] * 18);
+          if (drops[i] * 18 > h && Math.random() > 0.97) drops[i] = 0;
+          drops[i]++;
         }
-    </script>
+        requestAnimationFrame(draw);
+      }
+      draw();
+      window.addEventListener('resize', () => {
+        w = c.width = window.innerWidth;
+        h = c.height = window.innerHeight;
+      });
+    })();
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <!-- 3D JavaScript -->
-    <script type="module">
-        import * as THREE from 'three';
+    // ===== 2) THREE.JS — 3D ANIMATSIYA (boyitilgan) =====
+    (function init3D() {
+      const container = document.getElementById('three-container');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
 
-        // SETUP
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x050520);
-        scene.fog = new THREE.FogExp2(0x050520, 0.003);
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x050510);
 
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 2, 14);
+      const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+      camera.position.set(5, 2.5, 7);
+      camera.lookAt(0, 0, 0);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        container.appendChild(renderer.domElement);
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(width, height);
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
 
-        // YORUG'LIK
-        const ambientLight = new THREE.AmbientLight(0x333366);
-        scene.add(ambientLight);
-        
-        const sunLight = new THREE.PointLight(0xffaa66, 1.5);
-        sunLight.position.set(0, 0, 0);
-        scene.add(sunLight);
-        
-        const fillLight = new THREE.DirectionalLight(0x88aaff, 0.5);
-        fillLight.position.set(2, 3, 2);
-        scene.add(fillLight);
+      // yorug'lik
+      const amb = new THREE.AmbientLight(0x334466);
+      scene.add(amb);
+      const light1 = new THREE.DirectionalLight(0x00ffc8, 1.2);
+      light1.position.set(3, 6, 4);
+      light1.castShadow = true;
+      scene.add(light1);
+      const light2 = new THREE.DirectionalLight(0x3b9bff, 0.7);
+      light2.position.set(-4, 1, -3);
+      scene.add(light2);
+      const light3 = new THREE.PointLight(0xff3b3b, 0.6, 12);
+      light3.position.set(2, 3, 3);
+      scene.add(light3);
 
-        // QUYOSH
-        const sunGeo = new THREE.SphereGeometry(1.3, 64, 64);
-        const sunMat = new THREE.MeshStandardMaterial({ color: 0xffaa55, emissive: 0xff4422, emissiveIntensity: 0.8 });
-        const sun = new THREE.Mesh(sunGeo, sunMat);
-        scene.add(sun);
+      // ===== asosiy gruppa =====
+      const group = new THREE.Group();
 
-        // SAYYORALAR
-        const planetsData = [
-            { radius: 0.12, distance: 2.0, color: 0xcc8866, speed: 0.025 },
-            { radius: 0.14, distance: 2.7, color: 0xdd9977, speed: 0.018 },
-            { radius: 0.15, distance: 3.4, color: 0x4488ff, speed: 0.015 },
-            { radius: 0.13, distance: 4.1, color: 0xcc6644, speed: 0.012 },
-            { radius: 0.28, distance: 5.0, color: 0xccaa88, speed: 0.008 },
-            { radius: 0.25, distance: 5.9, color: 0xddbb99, speed: 0.006 },
-            { radius: 0.20, distance: 6.8, color: 0x88ccdd, speed: 0.005 },
-            { radius: 0.20, distance: 7.7, color: 0x4488aa, speed: 0.004 }
-        ];
+      // markaziy shar — “kiber yadro”
+      const sphereGeo = new THREE.SphereGeometry(1.3, 56, 56);
+      const sphereMat = new THREE.MeshStandardMaterial({
+        color: 0x00ffc8,
+        emissive: 0x006655,
+        roughness: 0.25,
+        metalness: 0.8,
+      });
+      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+      sphere.castShadow = true;
+      group.add(sphere);
 
-        const planets = [];
-        
-        planetsData.forEach((p, i) => {
-            const geo = new THREE.SphereGeometry(p.radius, 48, 48);
-            const mat = new THREE.MeshStandardMaterial({ color: p.color, metalness: 0.3, roughness: 0.5 });
-            const planet = new THREE.Mesh(geo, mat);
-            planet.userData = { distance: p.distance, speed: p.speed, angle: Math.random() * Math.PI * 2 };
-            scene.add(planet);
-            planets.push(planet);
-            
-            // Orbit
-            const orbitPoints = [];
-            for (let a = 0; a <= 128; a++) {
-                const angle = (a / 128) * Math.PI * 2;
-                orbitPoints.push(new THREE.Vector3(Math.cos(angle) * p.distance, 0, Math.sin(angle) * p.distance));
-            }
-            const orbitGeo = new THREE.BufferGeometry().setFromPoints(orbitPoints);
-            const orbitMat = new THREE.LineBasicMaterial({ color: 0x4488ff, transparent: true, opacity: 0.3 });
-            const orbit = new THREE.LineLoop(orbitGeo, orbitMat);
-            scene.add(orbit);
-        });
+      // ichki nur
+      const innerGlow = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 32, 32),
+        new THREE.MeshBasicMaterial({ color: 0x00ffc8, transparent: true, opacity: 0.2 })
+      );
+      group.add(innerGlow);
 
-        // YULDUZLAR
-        const starCount = 2000;
-        const starGeo = new THREE.BufferGeometry();
-        const starPos = new Float32Array(starCount * 3);
-        for (let i = 0; i < starCount; i++) {
-            starPos[i*3] = (Math.random() - 0.5) * 400;
-            starPos[i*3+1] = (Math.random() - 0.5) * 200;
-            starPos[i*3+2] = (Math.random() - 0.5) * 150 - 50;
-        }
-        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-        const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 });
-        const stars = new THREE.Points(starGeo, starMat);
-        scene.add(stars);
+      // halqalar (3 ta)
+      const ring1 = new THREE.Mesh(
+        new THREE.TorusGeometry(1.8, 0.05, 28, 70),
+        new THREE.MeshStandardMaterial({ color: 0xff3b3b, emissive: 0x661111 })
+      );
+      ring1.rotation.x = Math.PI / 2.3;
+      ring1.rotation.z = 0.5;
+      group.add(ring1);
 
-        // ZARRALAR
-        const particleCount = 3000;
-        const particleGeo = new THREE.BufferGeometry();
-        const particlePos = new Float32Array(particleCount * 3);
-        for (let i = 0; i < particleCount; i++) {
-            particlePos[i*3] = (Math.random() - 0.5) * 60;
-            particlePos[i*3+1] = (Math.random() - 0.5) * 40;
-            particlePos[i*3+2] = (Math.random() - 0.5) * 50 - 20;
-        }
-        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-        const particleMat = new THREE.PointsMaterial({ color: 0x88aaff, size: 0.05, transparent: true, blending: THREE.AdditiveBlending });
-        const particles = new THREE.Points(particleGeo, particleMat);
-        scene.add(particles);
+      const ring2 = new THREE.Mesh(
+        new THREE.TorusGeometry(2.1, 0.04, 28, 70),
+        new THREE.MeshStandardMaterial({ color: 0x3b9bff, emissive: 0x002266 })
+      );
+      ring2.rotation.y = 0.9;
+      ring2.rotation.x = 1.1;
+      group.add(ring2);
 
-        // ANIMATSIYA
-        let time = 0;
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.01;
-            
-            sun.rotation.y += 0.005;
-            
-            planets.forEach(planet => {
-                planet.userData.angle += planet.userData.speed;
-                planet.position.x = Math.cos(planet.userData.angle) * planet.userData.distance;
-                planet.position.z = Math.sin(planet.userData.angle) * planet.userData.distance;
-                planet.rotation.y += 0.01;
-            });
-            
-            stars.rotation.y += 0.0005;
-            particles.rotation.y += 0.0005;
-            particles.rotation.x += 0.0003;
-            
-            camera.position.x += (Math.sin(time * 0.1) * 0.3 - camera.position.x) * 0.02;
-            camera.lookAt(0, 0, 0);
-            
-            renderer.render(scene, camera);
-        }
-        
-        animate();
+      const ring3 = new THREE.Mesh(
+        new THREE.TorusGeometry(2.4, 0.03, 24, 70),
+        new THREE.MeshStandardMaterial({ color: 0xaa66ff, emissive: 0x330066 })
+      );
+      ring3.rotation.x = 0.6;
+      ring3.rotation.y = 1.6;
+      group.add(ring3);
 
-        // RESIZE
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+      // "yo'ldoshlar" — kichik sharchalar
+      const dotMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x00ffc8 });
+      for (let i = 0; i < 16; i++) {
+        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), dotMat);
+        const angle = (i / 16) * Math.PI * 2;
+        const radius = 2.5;
+        dot.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius * 0.7, Math.sin(angle * 0.6) * 0.8);
+        group.add(dot);
+      }
 
-        console.log('3D animation working!');
-    </script>
+      scene.add(group);
 
-    <script>
-        // AOS init
-        AOS.init({ duration: 1000, once: false });
-        
-        // Typing effect
-        const words = ["Cybersecurity", "Software Engineering", "Data Science", "Web Development", "Python Programming", "AI & ML"];
-        let wordIndex = 0, charIndex = 0, isDeleting = false;
-        const typedSpan = document.getElementById('typed-text');
-        
-        function type() {
-            const current = words[wordIndex];
-            if (isDeleting) {
-                typedSpan.textContent = current.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typedSpan.textContent = current.substring(0, charIndex + 1);
-                charIndex++;
-            }
-            if (!isDeleting && charIndex === current.length) {
-                isDeleting = true;
-                setTimeout(type, 2000);
-                return;
-            }
-            if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                wordIndex = (wordIndex + 1) % words.length;
-                setTimeout(type, 500);
-                return;
-            }
-            setTimeout(type, isDeleting ? 50 : 100);
-        }
-        type();
-        
-        function scrollToCourses() {
-            document.getElementById('courses-section').scrollIntoView({ behavior: 'smooth' });
-        }
-        window.scrollToCourses = scrollToCourses;
-    </script>
+      // qo'shimcha “yozuv” bloki (shaffof)
+      const textGroup = new THREE.Group();
+      const boxMat = new THREE.MeshStandardMaterial({
+        color: 0x00ffc8,
+        emissive: 0x004433,
+        transparent: true,
+        opacity: 0.15,
+        wireframe: true,
+      });
+      const box = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.3, 1.6), boxMat);
+      box.position.y = 2.0;
+      textGroup.add(box);
+      scene.add(textGroup);
+
+      // ===== animatsiya =====
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // asosiy aylanish
+        group.rotation.y += 0.005;
+        group.rotation.x = Math.sin(Date.now() * 0.0004) * 0.15;
+        group.rotation.z += 0.002;
+
+        // halqalar alohida
+        ring1.rotation.z += 0.012;
+        ring2.rotation.x += 0.009;
+        ring2.rotation.y += 0.015;
+        ring3.rotation.y += 0.01;
+        ring3.rotation.z += 0.007;
+
+        textGroup.rotation.y += 0.004;
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // ===== o'lcham =====
+      window.addEventListener('resize', () => {
+        const w2 = container.clientWidth;
+        const h2 = container.clientHeight;
+        renderer.setSize(w2, h2);
+        camera.aspect = w2 / h2;
+        camera.updateProjectionMatrix();
+      });
+
+      // ===== kamerani jonlantirish =====
+      let t = 0;
+      setInterval(() => {
+        t += 0.25;
+        camera.position.x = 5 + Math.sin(t) * 1.0;
+        camera.position.z = 7 + Math.cos(t * 0.7) * 1.0;
+        camera.lookAt(0, 0.2, 0);
+      }, 150);
+    })();
+  </script>
 </body>
 </html>

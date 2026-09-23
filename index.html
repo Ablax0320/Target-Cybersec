@@ -1,536 +1,542 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kiberxavfsizlik — To‘liq qo‘llanma</title>
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <style>
-    /* ===== GLOBAL ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-
-    body {
-      font-family: 'Orbitron', monospace;
-      background: #0a0a0a;
-      color: #00ffc8;
-      overflow-x: hidden;
-      padding: 15px;
-    }
-
-    #matrix-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      opacity: 0.15;
-    }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      background: rgba(8, 8, 8, 0.82);
-      backdrop-filter: blur(5px);
-      border: 2px solid #00ffc8;
-      box-shadow: 0 0 60px #00ffc866, inset 0 0 60px #00ffc822;
-      border-radius: 35px;
-      padding: 30px 25px;
-      position: relative;
-      z-index: 10;
-    }
-
-    h1 {
-      font-size: 3.8rem;
-      font-weight: 900;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 8px;
-      color: #00ffc8;
-      text-shadow: 0 0 30px #00ffc8, 0 0 80px #008f6b;
-      animation: glitch 2.2s infinite;
-      word-break: break-word;
-    }
-    @keyframes glitch {
-      0%, 100% { opacity: 1; text-shadow: 0 0 30px #00ffc8; }
-      2% { opacity: 0.3; transform: translateX(-5px); text-shadow: 0 0 60px #ff3b3b; }
-      4% { opacity: 0.9; transform: translateX(5px); text-shadow: 0 0 60px #3b9bff; }
-      6% { opacity: 1; transform: translateX(0); text-shadow: 0 0 30px #00ffc8; }
-    }
-
-    .subhead {
-      text-align: center;
-      font-size: 1.3rem;
-      color: #b0f0e0;
-      border-bottom: 2px solid #00ffc880;
-      padding-bottom: 20px;
-      margin-bottom: 25px;
-      letter-spacing: 4px;
-      font-family: 'Share Tech Mono', monospace;
-    }
-
-    /* ===== 3D ===== */
-    #three-container {
-      width: 100%;
-      height: 300px;
-      margin: 20px 0 30px;
-      border-radius: 40px;
-      border: 2px solid #00ffc8;
-      background: #030303;
-      box-shadow: inset 0 0 80px #00ffc833, 0 0 50px #00ffc855;
-    }
-
-    /* ===== BO'LIM SARI ===== */
-    .section-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #fff;
-      text-shadow: 0 0 20px #00ffc8;
-      margin: 45px 0 20px;
-      padding-left: 15px;
-      border-left: 8px solid #00ffc8;
-      letter-spacing: 3px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 22px;
-      margin: 20px 0;
-    }
-
-    .card {
-      background: #111;
-      border: 2px solid #00ffc8;
-      border-radius: 28px;
-      padding: 22px 18px 28px;
-      text-align: center;
-      transition: 0.3s ease;
-      box-shadow: 0 0 20px #00ffc833;
-      backdrop-filter: blur(2px);
-    }
-    .card:hover {
-      transform: scale(1.02) translateY(-8px);
-      box-shadow: 0 0 60px #00ffc8aa;
-      border-color: #aaffdd;
-    }
-
-    .card .emoji-big {
-      font-size: 4.2rem;
-      display: block;
-      margin-bottom: 8px;
-    }
-    .card h2 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #fff;
-      text-shadow: 0 0 12px #00ffc8;
-    }
-    .card p {
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 1rem;
-      line-height: 1.7;
-      color: #d5f5f0;
-      background: #1a1a1a90;
-      padding: 14px;
-      border-radius: 18px;
-      border-left: 5px solid #00ffc8;
-      text-align: left;
-      font-weight: 300;
-    }
-    .card .badge {
-      display: inline-block;
-      background: #00ffc8;
-      color: #0a0a0a;
-      font-weight: 900;
-      padding: 5px 18px;
-      border-radius: 40px;
-      font-size: 0.75rem;
-      margin-top: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    /* rangli kartalar */
-    .red { border-color: #ff3b3b; box-shadow: 0 0 25px #ff3b3b66; }
-    .red h2 { color: #ff5e5e; text-shadow: 0 0 20px #ff3b3b; }
-    .red .badge { background: #ff3b3b; color: #fff; }
-
-    .blue { border-color: #3b9bff; box-shadow: 0 0 25px #3b9bff66; }
-    .blue h2 { color: #5eb0ff; text-shadow: 0 0 20px #3b9bff; }
-    .blue .badge { background: #3b9bff; color: #fff; }
-
-    .purple { border-color: #b13bff; box-shadow: 0 0 25px #b13bff66; }
-    .purple h2 { color: #c75eff; text-shadow: 0 0 20px #b13bff; }
-    .purple .badge { background: #b13bff; color: #fff; }
-
-    .white-hat { border-color: #e0e0e0; box-shadow: 0 0 25px #ffffff66; }
-    .white-hat h2 { color: #f5f5f5; text-shadow: 0 0 20px #ffffff; }
-
-    .black-hat { border-color: #666; box-shadow: 0 0 25px #aaaaaa66; }
-    .black-hat h2 { color: #ccc; text-shadow: 0 0 20px #aaa; }
-
-    .grey-hat { border-color: #9f9f9f; box-shadow: 0 0 25px #9f9f9f66; }
-    .grey-hat h2 { color: #d0d0d0; text-shadow: 0 0 20px #b0b0b0; }
-
-    /* ===== QO'SHIMCHA BLOKLAR ===== */
-    .info-block {
-      background: #0d0d0d;
-      border: 1px solid #00ffc866;
-      border-radius: 30px;
-      padding: 25px 30px;
-      margin: 25px 0;
-      box-shadow: 0 0 30px #00ffc822;
-    }
-    .info-block h3 {
-      font-size: 1.7rem;
-      color: #fff;
-      text-shadow: 0 0 15px #00ffc8;
-      margin-bottom: 15px;
-    }
-    .info-block ul {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px 30px;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 1.05rem;
-      color: #c0f0e8;
-    }
-    .info-block ul li::before {
-      content: "⚡ ";
-      color: #00ffc8;
-      font-weight: 900;
-    }
-
-    .footer {
-      text-align: center;
-      font-size: 1rem;
-      color: #8bcbc0;
-      margin-top: 40px;
-      border-top: 2px solid #00ffc855;
-      padding-top: 30px;
-      letter-spacing: 2px;
-      font-family: 'Share Tech Mono', monospace;
-    }
-
-    @media (max-width: 700px) {
-      h1 { font-size: 2.4rem; }
-      .container { padding: 15px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ablax CTF</title>
+<style>
+:root{
+  --bg:#0c0f0c; --panel:#12160f; --card:#161b13; --text:#dff5df; --muted:#7fa77f; --accent:#39ff6a;
+  --err:#ff6b6b; --warn:#ffd75f; --border:#233523;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{margin:0; min-height:100vh; background:var(--bg); color:var(--text); font-family:"Segoe UI",Arial,sans-serif;}
+::selection{background:var(--accent); color:#062606;}
+.container{max-width:860px; margin:0 auto; padding:24px 16px 60px;}
+h1{color:var(--accent); text-align:center; letter-spacing:2px; margin-bottom:4px; font-size:26px;}
+.subtitle{text-align:center; color:var(--muted); font-size:13px; margin-bottom:28px;}
+.fade{animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+@keyframes pop{0%{transform:scale(1);}40%{transform:scale(1.03);}100%{transform:scale(1);}}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+.shake{animation:shake .4s;}
+.pop{animation:pop .35s;}
+#name-screen{max-width:380px; margin:60px auto; text-align:center;}
+.field{margin:14px 0; text-align:left;}
+.field label{display:block; font-size:12px; color:var(--muted); margin-bottom:5px;}
+input[type=text],input[type=password]{
+  width:100%; background:#0a0d0a; border:1px solid var(--border); color:var(--text);
+  padding:10px 12px; font-size:15px; border-radius:6px; outline:none; transition:border-color .2s;
+}
+input:focus{border-color:var(--accent);}
+button{
+  background:transparent; border:1px solid var(--accent); color:var(--accent); padding:10px 22px;
+  border-radius:6px; cursor:pointer; font-size:14px; transition:all .15s;
+}
+button:hover{background:rgba(57,255,106,.12); transform:translateY(-1px);}
+button:active{transform:translateY(0) scale(.97);}
+button:disabled{opacity:.4; cursor:default; transform:none;}
+#name-err{color:var(--err); font-size:12px; min-height:16px; margin-top:8px;}
+.top-bar{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;}
+.userchip{background:var(--card); border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:13px; color:var(--muted);}
+.userchip b{color:var(--accent);}
+.tabs{display:flex; gap:8px; margin-bottom:18px;}
+.tab-btn{flex:1; background:var(--card); border:1px solid var(--border); color:var(--muted); padding:10px; border-radius:8px;}
+.tab-btn.active{color:var(--accent); border-color:var(--accent); background:rgba(57,255,106,.06);}
+.flagformat{background:var(--card); border:1px dashed var(--border); border-radius:8px; padding:10px 14px; font-size:13px; color:var(--muted); margin-bottom:18px; text-align:center;}
+.flagformat code{color:var(--warn);}
+.qcard{background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 18px; margin-bottom:14px; transition:border-color .2s;}
+.qcard.solved{border-color:var(--accent);}
+.qhead{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+.qnum{color:var(--accent); font-weight:600; font-size:13px;}
+.badge{font-size:12px; padding:3px 10px; border-radius:12px; background:#1c261c; color:var(--muted);}
+.badge.ok{background:rgba(57,255,106,.15); color:var(--accent);}
+.qtext{font-size:14.5px; line-height:1.5; margin-bottom:12px;}
+.qrow{display:flex; gap:8px;}
+.qrow input{flex:1; font-family:monospace;}
+.err-line{color:var(--err); font-size:12px; margin-top:6px; min-height:14px;}
+#toast-wrap{position:fixed; top:16px; right:16px; z-index:50; display:flex; flex-direction:column; gap:8px;}
+.toast{background:var(--card); border:1px solid var(--accent); color:var(--accent); padding:10px 16px; border-radius:8px; font-size:13px; animation:slideIn .3s ease, fadeOut .4s ease 2.4s forwards;}
+.toast.bad{border-color:var(--err); color:var(--err);}
+@keyframes slideIn{from{transform:translateX(120%); opacity:0;} to{transform:translateX(0); opacity:1;}}
+@keyframes fadeOut{to{opacity:0; transform:translateX(20px);}}
+table{width:100%; border-collapse:collapse; font-size:13.5px;}
+th,td{padding:8px 10px; border-bottom:1px solid var(--border); text-align:left;}
+th{color:var(--muted); font-weight:500;}
+tr.me{background:rgba(57,255,106,.06);}
+.rank1{color:var(--warn);}
+/* terminal */
+.crt{background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden;}
+.bar{display:flex; align-items:center; gap:6px; padding:8px 12px; background:#0a0d0a; border-bottom:1px solid var(--border); font-size:12px; color:var(--muted);}
+.dot{width:10px;height:10px;border-radius:50%;}
+.d1{background:#ff5f56;} .d2{background:#ffbd2e;} .d3{background:#27c93f;}
+#output{height:52vh; max-height:460px; overflow-y:auto; padding:14px 14px 0; white-space:pre-wrap; word-break:break-word; line-height:1.45; font-family:"Courier New",monospace; font-size:13.5px; cursor:text;}
+#output::-webkit-scrollbar{width:8px;}
+#output::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+.line{margin:0 0 2px;}
+.prompt-c{color:var(--accent);}
+.flag-c{color:var(--warn);}
+#prompt-top{padding:6px 14px 0; color:var(--accent); font-family:"Courier New",monospace; font-size:13.5px; cursor:text;}
+#inputline{display:flex; align-items:center; padding:0 14px 14px; gap:6px; cursor:text;}
+#inputline .p{color:var(--accent); white-space:nowrap; font-family:"Courier New",monospace;}
+#cmd{flex:1; background:transparent; border:none; outline:none; color:var(--text); font-family:"Courier New",monospace; font-size:13.5px; min-width:0;}
+.hidden{display:none !important;}
+</style>
 </head>
 <body>
+<div id="toast-wrap"></div>
+<div class="container">
 
-  <!-- ===== FON MATRITSA ===== -->
-  <canvas id="matrix-canvas"></canvas>
+  <div id="name-screen" class="fade">
+    <h1>ABLAX CTF</h1>
+    <div class="subtitle">Ism va familyangizni kiriting</div>
+    <div class="field"><label>Ism Familiya</label><input id="name-in" type="text" autocomplete="off" placeholder="Masalan: Aziz Karimov"></div>
+    <button id="enter-btn">Kirish</button>
+    <div id="name-err"></div>
+  </div>
 
-  <div class="container">
-    <h1>⚡ KIBERXAVFSIZLIK ⚡</h1>
-    <div class="subhead">Red · Blue · Purple · White · Black · Grey &nbsp;|&nbsp; Hujum · Himoya · Axloq</div>
+  <div id="admin-screen" class="hidden fade">
+    <h1>KUZATUV PANELI</h1>
+    <div class="subtitle">Barcha ishtirokchilarning natijalari</div>
+    <div class="top-bar"><button id="admin-refresh">Yangilash</button><button id="admin-logout">Chiqish</button></div>
+    <table id="admin-table"><thead><tr><th>O'rin</th><th>Ism Familiya</th><th>Yechilgan</th><th>Jami ball</th></tr></thead><tbody id="admin-body"></tbody></table>
+  </div>
 
-    <!-- 3D SAHNA -->
-    <div id="three-container"></div>
-
-    <!-- ========================================= -->
-    <!-- 1) JAMOALAR (Red / Blue / Purple)        -->
-    <!-- ========================================= -->
-    <div class="section-title">🔰 JAMOALAR (TEAMLAR)</div>
-    <div class="grid-4">
-      <div class="card red">
-        <span class="emoji-big">🔴</span>
-        <h2>RED TEAM</h2>
-        <p><strong>Hujumchi ko‘z</strong> — real hujumlar (penetratsiya testi) orqali zaifliklarni topadi. Tizimni “buzish” orqali xavfsizlikni tekshiradi.</p>
-        <span class="badge">Offensive</span>
-      </div>
-      <div class="card blue">
-        <span class="emoji-big">🔵</span>
-        <h2>BLUE TEAM</h2>
-        <p><strong>Himoyachi</strong> — tizimni kuzatadi, xujumlarni aniqlaydi (IDS/IPS), loglarni tahlil qiladi va oldini oladi.</p>
-        <span class="badge">Defensive</span>
-      </div>
-      <div class="card purple">
-        <span class="emoji-big">🟣</span>
-        <h2>PURPLE TEAM</h2>
-        <p><strong>Red + Blue</strong> uyg‘unligi. Hujum va himoyani birlashtirib, jamoalar o‘rtasida aloqa o‘rnatadi. Samarali xavfsizlik siri.</p>
-        <span class="badge">Collaborative</span>
-      </div>
+  <div id="quiz-screen" class="hidden fade">
+    <h1>ABLAX CTF</h1>
+    <div class="top-bar">
+      <div class="userchip">Ishtirokchi: <b id="who"></b> &nbsp;|&nbsp; Jami: <b id="mytotal">0</b> ball</div>
+      <button id="quiz-logout">Chiqish</button>
+    </div>
+    <div class="flagformat">Har bir flag <code>FLAG{"{"}Flagni matni{"}"}</code> ko'rinishida bo'ladi. Terminalda toping va tegishli savolga joylashtiring.</div>
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-q">Savollar</button>
+      <button class="tab-btn" id="tab-t">Terminal</button>
     </div>
 
-    <!-- ========================================= -->
-    <!-- 2) SHLYAPALI HAKKERLAR                   -->
-    <!-- ========================================= -->
-    <div class="section-title">🎩 SHLYAPALI HAKKERLAR</div>
-    <div class="grid-4">
-      <div class="card white-hat">
-        <span class="emoji-big">⚪</span>
-        <h2>OQ SHLYAPA</h2>
-        <p><strong>“Yaxshi hakker”</strong> — ruxsat bilan tizimlarni sinab, zaifliklarni egalariga xabar qiladi. Qonuniy va axloqiy.</p>
-        <span class="badge">Ethical</span>
+    <div id="questions-view"></div>
+
+    <div id="terminal-view" class="hidden">
+      <div class="crt">
+        <div class="bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span>ablax@terminal</span></div>
+        <div id="output"></div>
+        <div id="prompt-top"></div>
+        <div id="inputline"><span class="p" id="prompt-p">$</span><input id="cmd" autocomplete="off" spellcheck="false" autocapitalize="off" autocorrect="off"></div>
       </div>
-      <div class="card black-hat">
-        <span class="emoji-big">⚫</span>
-        <h2>QORA SHLYAPA</h2>
-        <p><strong>“Yomon hakker”</strong> — ruxsatsiz buzib, maʼlumot o‘g‘irlaydi, zarar yetkazadi. Noqonuniy va xavfli.</p>
-        <span class="badge">Malicious</span>
-      </div>
-      <div class="card grey-hat">
-        <span class="emoji-big">🔘</span>
-        <h2>KULRANG SHLYAPA</h2>
-        <p><strong>Oraliq</strong> — ruxsatsiz kirib, lekin yomonlik qilmaydi. Baʼzan topilmalarini ixtiyoriy ravishda bildiradi. Qonuniy noaniq.</p>
-        <span class="badge">Grey area</span>
-      </div>
-    </div>
-
-    <!-- ========================================= -->
-    <!-- 3) QO'SHIMCHA: HUJUM TURLARI              -->
-    <!-- ========================================= -->
-    <div class="section-title">💥 KENG TARQALGAN HUJUM TURLARI</div>
-    <div class="info-block">
-      <ul>
-        <li><strong>Phishing</strong> — soxta xabarlar orqali maʼlumot o‘g‘irlash</li>
-        <li><strong>DDoS</strong> — tizimni so‘rovlar bilan to‘ldirib ishdan chiqarish</li>
-        <li><strong>Malware</strong> — zararli dasturlar (virus, trojan, ransomware)</li>
-        <li><strong>Man-in-the-Middle</strong> — aloqani tinglash va o‘zgartirish</li>
-        <li><strong>SQL Injection</strong> — maʼlumotlar bazasiga kirish</li>
-        <li><strong>Zero-day</strong> — hali maʼlum bo‘lmagan zaiflikdan foydalanish</li>
-      </ul>
-    </div>
-
-    <!-- ========================================= -->
-    <!-- 4) HIMOYA USULLARI                        -->
-    <!-- ========================================= -->
-    <div class="section-title">🛡️ HIMOYA USULLARI</div>
-    <div class="info-block">
-      <ul>
-        <li><strong>Firewall</strong> — tarmoq trafigini filtrlash</li>
-        <li><strong>Antivirus</strong> — zararli dasturlarni aniqlash va yo‘qotish</li>
-        <li><strong>2FA (Ikki bosqichli autentifikatsiya)</strong> — qo‘shimcha himoya qatlami</li>
-        <li><strong>VPN</strong> — shifrlangan aloqa kanali</li>
-        <li><strong>SIEM</strong> — xavfsizlik hodisalarini boshqarish va tahlil qilish</li>
-        <li><strong>Regular Update</strong> — dasturiy taʼminotni yangilab turish</li>
-      </ul>
-    </div>
-
-    <!-- ========================================= -->
-    <!-- 5) AXLOQ VA QONUNIYAT                     -->
-    <!-- ========================================= -->
-    <div class="section-title">⚖️ AXLOQ VA QONUNIYAT</div>
-    <div class="info-block" style="border-color: #ffaa33;">
-      <ul>
-        <li><strong>Oq shlyapa</strong> — qonuniy va axloqiy (ruxsat bilan)</li>
-        <li><strong>Qora shlyapa</strong> — noqonuniy va axloqsiz</li>
-        <li><strong>Kulrang shlyapa</strong> — noaniq, lekin ko‘pincha zararsiz</li>
-        <li><strong>Red/Blue/Purple</strong> — tashkilot ichida qonuniy faoliyat</li>
-        <li><strong>GDPR, HIPAA</strong> — maʼlumotlarni himoya qilish standartlari</li>
-      </ul>
-    </div>
-
-    <!-- ========================================= -->
-    <!-- 6) QISQACHA XULOSA                        -->
-    <!-- ========================================= -->
-    <div class="section-title">🧠 XULOSA</div>
-    <div class="info-block" style="border-color: #ff66ff;">
-      <p style="font-family:'Segoe UI',sans-serif; font-size:1.1rem; color:#d0f5ee; line-height:1.8;">
-        <strong>Kiberxavfsizlik</strong> — bu faqat texnika emas, balki <strong>inson omili</strong>, <strong>axloq</strong> va <strong>doimiy o‘rganish</strong>dir.
-        Har bir jamoa (Red, Blue, Purple) va har bir hakker (oq, qora, kulrang) o‘z rolini o‘ynaydi.
-        <br><br>
-        <span style="color:#00ffc8; font-weight:700;">Esda tut:</span> Eng kuchli himoya — bu <strong>bilim</strong> va <strong>xabardorlik</strong>!
-      </p>
-    </div>
-
-    <div class="footer">
-      🔐 “Kiberxavfsizlik — bu hammamizning mas’uliyatimiz.”  |  3D + Animatsiya  |  © 2026
     </div>
   </div>
 
-  <!-- ========================================= -->
-  <!-- JAVASCRIPT                                -->
-  <!-- ========================================= -->
+</div>
 
-  <script>
-    // ===== 1) MATRITSA FONI =====
-    (function matrix() {
-      const c = document.getElementById('matrix-canvas');
-      const ctx = c.getContext('2d');
-      let w = c.width = window.innerWidth;
-      let h = c.height = window.innerHeight;
-      const chars = "0123456789ABCDEF";
-      const cols = Math.floor(w / 18);
-      const drops = Array(cols).fill(1);
+<script>
+/* ---------- xavfsizlik: kod ko'rishni qiyinlashtirish (100% himoya emas) ---------- */
+document.addEventListener('contextmenu', e=>e.preventDefault());
+document.addEventListener('keydown', e=>{
+  const k = e.key.toLowerCase();
+  if(e.key === 'F12' || (e.ctrlKey && k==='u') || (e.ctrlKey && e.shiftKey && (k==='i'||k==='j'||k==='c'))){
+    e.preventDefault();
+  }
+});
 
-      function draw() {
-        ctx.fillStyle = 'rgba(10, 10, 10, 0.07)';
-        ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = '#00ffc8';
-        ctx.font = '16px monospace';
-        for (let i = 0; i < drops.length; i++) {
-          const text = chars[Math.floor(Math.random() * chars.length)];
-          ctx.fillText(text, i * 18, drops[i] * 18);
-          if (drops[i] * 18 > h && Math.random() > 0.97) drops[i] = 0;
-          drops[i]++;
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
-      window.addEventListener('resize', () => {
-        w = c.width = window.innerWidth;
-        h = c.height = window.innerHeight;
-      });
-    })();
+/* ---------- admin ---------- */
+const ADMIN_NAME = "ADMIN ADMIN"; // <-- shu yerga o'z Ism Familyangizni yozing (katta-kichik harf muhim emas)
 
-    // ===== 2) THREE.JS — 3D ANIMATSIYA (boyitilgan) =====
-    (function init3D() {
-      const container = document.getElementById('three-container');
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+/* ---------- savollar ---------- */
+const QUESTIONS = [
+ "Joriy foydalanuvchi yashirin qismida flagni toping.",
+ "Joriy foydalanuvchi Desktop papkasida flagni toping.",
+ "Joriy foydalanuvchi Dokumentlar papkasida txt fayl ichidan flagni toping.",
+ "Joriy foydalanuvchi yashirin qismidagi bash tarixi fayli ichidan flagni oling.",
+ "Ildizdan keyin sozlamalar papkasidan flagni toping.",
+ "Ildizdan keyin tez-tez o'zgaradigan ma'lumotlar papkasidan log papkasi ichidagi flagni toping.",
+ "Ildizdan keyin tez-tez o'zgaradigan ma'lumotlar papkasidan sayt joylashgan papkani toping va html fayl ichidagi flagni oling.",
+ "Ildizdan keyin vaqtinchalik fayllar papkasidan yashirin papka ichidagi flagni oling.",
+ "Ildizdan keyin super user (root) papkasidagi flagni toping.",
+ "Ildizdan keyin dasturlar va umumiy fayllar papkasidan share papkasi ichidagi flagni toping.",
+ "Ildizdan keyin qo'shimcha dasturlar papkasidagi app papkasi, share papkasi ichidagi flagni toping.",
+ "Ildizdan keyin USB va tashqi xotiralar papkasi ichidagi flagni toping.",
+ "Ildizdan keyin xizmat ko'rsatuvchi dasturlar papkasi ichidagi flagni toping.",
+ "Ildizdan keyin Linuxni ishga tushirish papkasidan flagni toping.",
+ "Ildizdan keyin kompyuter qurilmalari papkasidagi maxfiy papka ichidagi flagni oling."
+];
 
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x050510);
+/* ---------- yordamchi funksiyalar ---------- */
+function normName(n){ return n.trim().replace(/\s+/g,' '); }
+function nameKey(n){ return normName(n).toLowerCase(); }
+function hashStr(str){
+  let h = 5381;
+  for(let i=0;i<str.length;i++){ h = ((h<<5)+h) + str.charCodeAt(i); h = h & 0xffffffff; }
+  return (h>>>0).toString(36);
+}
+function flagFor(key, qnum){ return 'FLAG{'+hashStr(key+'_salt_ablax')+'_q'+qnum+'}'; }
+function pointsForRank(rank){
+  if(rank===1) return 100;
+  if(rank===2) return 90;
+  if(rank===3) return 80;
+  const p = 80 - 2*(rank-3);
+  return p > 10 ? p : 10;
+}
+function loadUsers(){ try{ return JSON.parse(localStorage.getItem('ablax_users')||'{}'); }catch(e){ return {}; } }
+function saveUsers(u){ localStorage.setItem('ablax_users', JSON.stringify(u)); }
+function loadRanks(){ try{ return JSON.parse(localStorage.getItem('ablax_ranks')||'{}'); }catch(e){ return {}; } }
+function saveRanks(r){ localStorage.setItem('ablax_ranks', JSON.stringify(r)); }
 
-      const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-      camera.position.set(5, 2.5, 7);
-      camera.lookAt(0, 0, 0);
+function toast(msg, bad){
+  const t = document.createElement('div');
+  t.className = 'toast' + (bad?' bad':'');
+  t.textContent = msg;
+  document.getElementById('toast-wrap').appendChild(t);
+  setTimeout(()=>t.remove(), 3000);
+}
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(width, height);
-      renderer.shadowMap.enabled = true;
-      container.appendChild(renderer.domElement);
+let currentKey = null, currentName = null;
 
-      // yorug'lik
-      const amb = new THREE.AmbientLight(0x334466);
-      scene.add(amb);
-      const light1 = new THREE.DirectionalLight(0x00ffc8, 1.2);
-      light1.position.set(3, 6, 4);
-      light1.castShadow = true;
-      scene.add(light1);
-      const light2 = new THREE.DirectionalLight(0x3b9bff, 0.7);
-      light2.position.set(-4, 1, -3);
-      scene.add(light2);
-      const light3 = new THREE.PointLight(0xff3b3b, 0.6, 12);
-      light3.position.set(2, 3, 3);
-      scene.add(light3);
+/* ---------- kirish ---------- */
+document.getElementById('enter-btn').addEventListener('click', enter);
+document.getElementById('name-in').addEventListener('keydown', e=>{ if(e.key==='Enter') enter(); });
 
-      // ===== asosiy gruppa =====
-      const group = new THREE.Group();
+function enter(){
+  const raw = document.getElementById('name-in').value;
+  const name = normName(raw);
+  const err = document.getElementById('name-err');
+  if(name.length < 3 || !name.includes(' ')){ err.textContent = "Ism va familyangizni to'liq kiriting."; return; }
+  err.textContent = '';
+  currentName = name; currentKey = nameKey(name);
 
-      // markaziy shar — “kiber yadro”
-      const sphereGeo = new THREE.SphereGeometry(1.3, 56, 56);
-      const sphereMat = new THREE.MeshStandardMaterial({
-        color: 0x00ffc8,
-        emissive: 0x006655,
-        roughness: 0.25,
-        metalness: 0.8,
-      });
-      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-      sphere.castShadow = true;
-      group.add(sphere);
+  document.getElementById('name-screen').classList.add('hidden');
 
-      // ichki nur
-      const innerGlow = new THREE.Mesh(
-        new THREE.SphereGeometry(0.9, 32, 32),
-        new THREE.MeshBasicMaterial({ color: 0x00ffc8, transparent: true, opacity: 0.2 })
-      );
-      group.add(innerGlow);
+  if(currentKey === nameKey(ADMIN_NAME)){
+    document.getElementById('admin-screen').classList.remove('hidden');
+    renderAdmin();
+  } else {
+    const users = loadUsers();
+    if(!users[currentKey]) users[currentKey] = { name: currentName, scores: {} };
+    else users[currentKey].name = currentName;
+    saveUsers(users);
+    document.getElementById('who').textContent = currentName;
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    buildFS(currentKey);
+    renderQuestions();
+    updateTotal();
+    initTerminalPrompt();
+  }
+}
 
-      // halqalar (3 ta)
-      const ring1 = new THREE.Mesh(
-        new THREE.TorusGeometry(1.8, 0.05, 28, 70),
-        new THREE.MeshStandardMaterial({ color: 0xff3b3b, emissive: 0x661111 })
-      );
-      ring1.rotation.x = Math.PI / 2.3;
-      ring1.rotation.z = 0.5;
-      group.add(ring1);
+function logoutTo(el){
+  el.classList.add('hidden');
+  document.getElementById('name-screen').classList.remove('hidden');
+  document.getElementById('name-in').value='';
+  currentKey=null; currentName=null;
+}
+document.getElementById('admin-logout').addEventListener('click', ()=>logoutTo(document.getElementById('admin-screen')));
+document.getElementById('quiz-logout').addEventListener('click', ()=>logoutTo(document.getElementById('quiz-screen')));
 
-      const ring2 = new THREE.Mesh(
-        new THREE.TorusGeometry(2.1, 0.04, 28, 70),
-        new THREE.MeshStandardMaterial({ color: 0x3b9bff, emissive: 0x002266 })
-      );
-      ring2.rotation.y = 0.9;
-      ring2.rotation.x = 1.1;
-      group.add(ring2);
+/* ---------- admin panel ---------- */
+function renderAdmin(){
+  const users = loadUsers();
+  const rows = Object.values(users).map(u=>{
+    const scores = u.scores || {};
+    const total = Object.values(scores).reduce((a,b)=>a+b,0);
+    const solved = Object.keys(scores).length;
+    return {name:u.name, total, solved};
+  }).sort((a,b)=>b.total-a.total);
+  const body = document.getElementById('admin-body');
+  body.innerHTML='';
+  rows.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td class="'+(i===0?'rank1':'')+'">'+(i+1)+'</td><td>'+esc(r.name)+'</td><td>'+r.solved+' / '+QUESTIONS.length+'</td><td>'+r.total+'</td>';
+    body.appendChild(tr);
+  });
+  if(rows.length===0) body.innerHTML = '<tr><td colspan="4" style="color:var(--muted)">Hali hech kim ishtirok etmagan.</td></tr>';
+}
+document.getElementById('admin-refresh').addEventListener('click', renderAdmin);
+window.addEventListener('storage', e=>{ if(e.key==='ablax_users' && !document.getElementById('admin-screen').classList.contains('hidden')) renderAdmin(); });
 
-      const ring3 = new THREE.Mesh(
-        new THREE.TorusGeometry(2.4, 0.03, 24, 70),
-        new THREE.MeshStandardMaterial({ color: 0xaa66ff, emissive: 0x330066 })
-      );
-      ring3.rotation.x = 0.6;
-      ring3.rotation.y = 1.6;
-      group.add(ring3);
+/* ---------- savollar ---------- */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-      // "yo'ldoshlar" — kichik sharchalar
-      const dotMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x00ffc8 });
-      for (let i = 0; i < 16; i++) {
-        const dot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), dotMat);
-        const angle = (i / 16) * Math.PI * 2;
-        const radius = 2.5;
-        dot.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius * 0.7, Math.sin(angle * 0.6) * 0.8);
-        group.add(dot);
-      }
+function renderQuestions(){
+  const users = loadUsers();
+  const scores = (users[currentKey] && users[currentKey].scores) || {};
+  const view = document.getElementById('questions-view');
+  view.innerHTML='';
+  QUESTIONS.forEach((qtext,idx)=>{
+    const qn = idx+1;
+    const solved = scores[qn] !== undefined;
+    const card = document.createElement('div');
+    card.className = 'qcard' + (solved?' solved':'');
+    card.id = 'qcard-'+qn;
+    card.innerHTML =
+      '<div class="qhead"><span class="qnum">'+qn+'-savol</span>'+
+      '<span class="badge '+(solved?'ok':'')+'">'+(solved? ("Yechildi \u2014 "+scores[qn]+" ball") : "Yechilmagan")+'</span></div>'+
+      '<div class="qtext">'+esc(qtext)+'</div>'+
+      (solved ? '' :
+        '<div class="qrow"><input type="text" id="ans-'+qn+'" placeholder="FLAG{...}"><button data-q="'+qn+'" class="submit-btn">Yuborish</button></div>'+
+        '<div class="err-line" id="errl-'+qn+'"></div>');
+    view.appendChild(card);
+  });
+  view.querySelectorAll('.submit-btn').forEach(b=>b.addEventListener('click', ()=>submitFlag(parseInt(b.dataset.q,10))));
+  view.querySelectorAll('input[id^=ans-]').forEach(inp=>{
+    inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ submitFlag(parseInt(inp.id.split('-')[1],10)); } });
+  });
+}
 
-      scene.add(group);
+function updateTotal(){
+  const users = loadUsers();
+  const scores = (users[currentKey] && users[currentKey].scores) || {};
+  const total = Object.values(scores).reduce((a,b)=>a+b,0);
+  document.getElementById('mytotal').textContent = total;
+}
 
-      // qo'shimcha “yozuv” bloki (shaffof)
-      const textGroup = new THREE.Group();
-      const boxMat = new THREE.MeshStandardMaterial({
-        color: 0x00ffc8,
-        emissive: 0x004433,
-        transparent: true,
-        opacity: 0.15,
-        wireframe: true,
-      });
-      const box = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.3, 1.6), boxMat);
-      box.position.y = 2.0;
-      textGroup.add(box);
-      scene.add(textGroup);
+function submitFlag(qn){
+  const inp = document.getElementById('ans-'+qn);
+  const errl = document.getElementById('errl-'+qn);
+  const val = (inp.value||'').trim();
+  const expected = flagFor(currentKey, qn);
+  if(!val){ errl.textContent = "Flagni kiriting."; return; }
+  if(val !== expected){
+    errl.textContent = "Noto'g'ri flag. Qayta urinib ko'ring.";
+    const card = document.getElementById('qcard-'+qn);
+    card.classList.add('shake'); setTimeout(()=>card.classList.remove('shake'), 400);
+    toast("Noto'g'ri flag!", true);
+    return;
+  }
+  errl.textContent='';
+  const users = loadUsers();
+  const ranks = loadRanks();
+  if(!ranks[qn]) ranks[qn] = [];
+  if(ranks[qn].includes(currentKey)){
+    toast('Bu savolni allaqachon yechgansiz.');
+    return;
+  }
+  ranks[qn].push(currentKey);
+  const rank = ranks[qn].length;
+  const pts = pointsForRank(rank);
+  if(!users[currentKey]) users[currentKey] = {name:currentName, scores:{}};
+  users[currentKey].scores[qn] = pts;
+  saveUsers(users); saveRanks(ranks);
+  toast('To\'g\'ri! '+pts+' ball oldingiz ('+rank+'-o\'rin)');
+  renderQuestions();
+  updateTotal();
+  const card = document.getElementById('qcard-'+qn);
+  if(card){ card.classList.add('pop'); setTimeout(()=>card.classList.remove('pop'),350); }
+}
 
-      // ===== animatsiya =====
-      function animate() {
-        requestAnimationFrame(animate);
+/* ---------- tablar ---------- */
+document.getElementById('tab-q').addEventListener('click', ()=>{
+  document.getElementById('tab-q').classList.add('active');
+  document.getElementById('tab-t').classList.remove('active');
+  document.getElementById('questions-view').classList.remove('hidden');
+  document.getElementById('terminal-view').classList.add('hidden');
+});
+document.getElementById('tab-t').addEventListener('click', ()=>{
+  document.getElementById('tab-t').classList.add('active');
+  document.getElementById('tab-q').classList.remove('active');
+  document.getElementById('terminal-view').classList.remove('hidden');
+  document.getElementById('questions-view').classList.add('hidden');
+  setTimeout(()=>document.getElementById('cmd').focus(), 50);
+});
 
-        // asosiy aylanish
-        group.rotation.y += 0.005;
-        group.rotation.x = Math.sin(Date.now() * 0.0004) * 0.15;
-        group.rotation.z += 0.002;
+/* ================= TERMINAL (Ablax Linux) ================= */
+function mkFile(content){ return {type:'file', content: content}; }
+function mkDir(children){ return {type:'dir', children: children || {}}; }
+function addNames(node, names, isFile, fill){
+  names.forEach(n=>{ if(!node.children[n]) node.children[n] = isFile ? mkFile(fill || ('['+n+' simulyatsiya fayli]')) : mkDir(); });
+}
 
-        // halqalar alohida
-        ring1.rotation.z += 0.012;
-        ring2.rotation.x += 0.009;
-        ring2.rotation.y += 0.015;
-        ring3.rotation.y += 0.01;
-        ring3.rotation.z += 0.007;
+let FS, cwd;
 
-        textGroup.rotation.y += 0.004;
+function buildFS(key){
+  const f = qn => flagFor(key, qn);
+  FS = mkDir({
+    home:mkDir({ user:mkDir({
+      'Desktop':mkDir({ 'flag2.txt':mkFile('Tabriklaymiz!\n'+f(2)) }),
+      'Documents':mkDir({ 'notes.txt':mkFile("Eslatma: parolni almashtirish kerak.\nLoyiha rejasi: modullarni yakunlash.\n"+f(3)+"\nKeyingi safar ko'proq yozaman.") }),
+      '.flag1':mkFile(f(1)),
+      '.bash_history':mkFile('ls -la\ncd Desktop\ncat flag2.txt\n# '+f(4)+'\ncd ..\nexit'),
+      'Downloads':mkDir({}), 'Projects':mkDir({}), 'Public':mkDir({})
+    })}),
+    etc:mkDir({
+      'passwd':mkFile('user:x:1000:1000:Ablax User:/home/user:/bin/zsh\nroot:x:0:0:root:/root:/bin/zsh'),
+      'flag4.conf':mkFile('# tizim konfiguratsiyasi\nservice=ablax\nport=2222\n# '+f(5))
+    }),
+    var:mkDir({
+      log:mkDir({ 'flag3.log':mkFile('[INFO] tizim yuklandi\n[INFO] ablax-daemon ishga tushdi\n'+f(6)+'\n[INFO] tekshiruv yakunlandi') }),
+      www:mkDir({ html:mkDir({ 'index.html':mkFile('<html>\n<!-- '+f(7)+' -->\n<body>Ablax veb sahifasi</body>\n</html>') })})
+    }),
+    tmp:mkDir({ '.hidden':mkDir({ 'flag5':mkFile(f(8)) })}),
+    root:mkDir({ 'flag6.txt':mkFile(f(9)) }),
+    usr:mkDir({ share:mkDir({ 'flag7':mkFile(f(10)) })}),
+    opt:mkDir({ app:mkDir({ share:mkDir({ 'flag8':mkFile(f(11)) })})}),
+    media:mkDir({ usb:mkDir({ 'flag12.txt':mkFile(f(12)) })}),
+    srv:mkDir({ backup:mkDir({ 'flag13_backup.zip':mkFile('[binary zaxira fayli]\n'+f(13)) })}),
+    boot:mkDir({ 'flag14':mkFile(f(14)) }),
+    dev:mkDir({ '.secret':mkDir({ 'flag15':mkFile(f(15)) })}),
+    bin:mkDir({}), sbin:mkDir({}), sys:mkDir({}), proc:mkDir({}), run:mkDir({}), mnt:mkDir({}),
+    lib:mkDir({}), lib32:mkDir({}), lib64:mkDir({}), libx32:mkDir({}), 'lost+found':mkDir({})
+  });
+  addNames(FS, ['initrd.img','initrd.img.old','vmlinuz','vmlinuz.old','swapfile'], true, '[tizim binary fayli]');
+  const homeDirs = ['aquatone','Arduino','archives','busybox-1.36.0','cefclient','crlfuzz','dirsearch',
+    'EyeWitness','FireFox','gitleaks','go','HTB','Kiberetika','LinkFinder','massdns','Music','Notebooks',
+    'Photon','Pictures','reports','Screenshots','SecretFinder','shc','snap','Target','Templates','trufflehog',
+    'venv','Videos','VirtualBox VMs'];
+  const homeFiles = ['cookies.txt','cron.log','humangate.js','ilova1.js','pow.py','solve.py'];
+  const homeNode = FS.children.home.children.user;
+  addNames(homeNode, homeDirs, false);
+  addNames(homeNode, homeFiles, true);
+  cwd = ['home','user'];
+}
 
-        renderer.render(scene, camera);
-      }
-      animate();
+const out = document.getElementById('output');
+const cmdIn = document.getElementById('cmd');
+const promptTop = document.getElementById('prompt-top');
+let cmdHistory = [], histIdx = -1;
 
-      // ===== o'lcham =====
-      window.addEventListener('resize', () => {
-        const w2 = container.clientWidth;
-        const h2 = container.clientHeight;
-        renderer.setSize(w2, h2);
-        camera.aspect = w2 / h2;
-        camera.updateProjectionMatrix();
-      });
+function print(text, cls){
+  const p = document.createElement('div');
+  p.className = 'line' + (cls ? ' '+cls : '');
+  p.innerHTML = esc(text).replace(/FLAG\{[^}]+\}/g, m => '<span class="flag-c">'+m+'</span>');
+  out.appendChild(p); out.scrollTop = out.scrollHeight;
+}
+function pathStr(){ return '/' + cwd.join('/'); }
+function shortPath(){ return (cwd.length===2 && cwd[0]==='home' && cwd[1]==='user') ? '~' : pathStr(); }
+function initTerminalPrompt(){
+  out.innerHTML=''; cmdHistory=[]; histIdx=-1;
+  updatePrompt();
+  print('Ablax Linux 6.8.0-ablax tty1');
+  print('Xush kelibsiz, '+currentName+'! Buyruqlar ro\'yxati uchun: help');
+  print('');
+}
+function updatePrompt(){ promptTop.textContent = '\u250c\u2500\u2500('+(currentName?currentName.split(' ')[0].toLowerCase():'user')+'\u3423ablax)-['+shortPath()+']'; }
 
-      // ===== kamerani jonlantirish =====
-      let t = 0;
-      setInterval(() => {
-        t += 0.25;
-        camera.position.x = 5 + Math.sin(t) * 1.0;
-        camera.position.z = 7 + Math.cos(t * 0.7) * 1.0;
-        camera.lookAt(0, 0.2, 0);
-      }, 150);
-    })();
-  </script>
+function resolve(input){
+  let parts;
+  if(!input || input==='~'){ return ['home','user']; }
+  if(input.startsWith('~/')){ input = 'home/user/'+input.slice(2); }
+  if(input.startsWith('/')){ parts = input.split('/').filter(Boolean); }
+  else { parts = cwd.concat(input.split('/').filter(Boolean)); }
+  const res=[];
+  for(const p of parts){ if(p==='.') continue; if(p==='..'){ res.pop(); continue; } res.push(p); }
+  return res;
+}
+function getNode(parts){ let node=FS; for(const p of parts){ if(!node.children || !node.children[p]) return null; node=node.children[p]; } return node; }
+function listDir(node, showHidden, longFmt){
+  const names = Object.keys(node.children).filter(n=>showHidden||!n.startsWith('.')).sort();
+  if(longFmt){
+    names.forEach(n=>{
+      const c = node.children[n];
+      const type = c.type==='dir'?'d':'-';
+      const size = c.type==='dir'?4096:(c.content?c.content.length:0);
+      print(type+'rwxr-xr-x 1 user user '+String(size).padStart(6)+' '+(c.type==='dir'?n+'/':n));
+    });
+    if(names.length===0) print("(bo'sh)");
+  } else {
+    print(names.map(n=>node.children[n].type==='dir'?n+'/':n).join('  ') || "(bo'sh)");
+  }
+}
+function findRec(node, pattern, curPath, results){
+  const rx = new RegExp('^'+pattern.split('*').map(s=>s.replace(/[.+?^${}()|[\]\\]/g,'\\$&')).join('.*')+'$','i');
+  for(const name in node.children){
+    const c = node.children[name]; const full = curPath+'/'+name;
+    if(rx.test(name)) results.push(full);
+    if(c.type==='dir') findRec(c, pattern, full, results);
+  }
+}
+function grepRec(node, needle, curPath, results){
+  for(const name in node.children){
+    const c = node.children[name]; const full = curPath+'/'+name;
+    if(c.type==='file' && c.content){
+      c.content.split('\n').forEach(line=>{ if(line.toLowerCase().includes(needle.toLowerCase())) results.push(full+': '+line); });
+    } else if(c.type==='dir'){ grepRec(c, needle, full, results); }
+  }
+}
+const HELP = [
+"Mavjud komandalar:",
+"  ls [-a] [-l] [yo'l]     - papka tarkibini ko'rsatish",
+"  cd [yo'l]               - papkani almashtirish (cd .. , cd ~, cd /etc)",
+"  pwd                     - joriy yo'lni ko'rsatish",
+"  cat [fayl]              - fayl tarkibini o'qish",
+"  find [yo'l] -name NAQSH - fayl/papkani nom bo'yicha qidirish (* ishlaydi)",
+"  grep -r MATN [yo'l]     - fayl matnlari ichidan qidirish",
+"  whoami / uname -a       - tizim/foydalanuvchi haqida",
+"  history / clear / help / exit"
+].join('\n');
+function runCommand(raw){
+  const line = raw.trim();
+  const topLine = promptTop.textContent;
+  if(line==='') return;
+  cmdHistory.push(line); histIdx = cmdHistory.length;
+  print(topLine, 'prompt-c'); print('\u2514\u2500$ '+line, 'prompt-c');
+  const args = line.split(/\s+/); const cmd = args[0];
+  if(cmd==='help'){ print(HELP); return; }
+  if(cmd==='clear'){ out.innerHTML=''; return; }
+  if(cmd==='whoami'){ print('user'); return; }
+  if(cmd==='uname'){ print('Linux ablax 6.8.0-ablax #1 SMP x86_64 GNU/Linux'); return; }
+  if(cmd==='pwd'){ print(pathStr()); return; }
+  if(cmd==='history'){ cmdHistory.forEach((c,i)=>print((i+1)+'  '+c)); return; }
+  if(cmd==='exit'){ print('Chiqish uchun "Savollar" tabiga o\'ting.'); return; }
+  if(cmd==='ls'){
+    let showHidden=false, longFmt=false, target=null;
+    for(let i=1;i<args.length;i++){ if(args[i].startsWith('-')){ if(args[i].includes('a')) showHidden=true; if(args[i].includes('l')) longFmt=true; } else target=args[i]; }
+    const parts = resolve(target||'.'); const node = getNode(parts);
+    if(!node){ print("ls: '"+(target||'.')+"': bunday fayl yoki papka yo'q"); return; }
+    if(node.type!=='dir'){ print(parts[parts.length-1]); return; }
+    listDir(node, showHidden, longFmt); return;
+  }
+  if(cmd==='cd'){
+    const target = args[1]||'~'; const parts = resolve(target); const node = getNode(parts);
+    if(!node){ print('cd: '+target+": bunday papka yo'q"); return; }
+    if(node.type!=='dir'){ print('cd: '+target+': fayl, papka emas'); return; }
+    cwd = parts; updatePrompt(); return;
+  }
+  if(cmd==='cat'){
+    if(!args[1]){ print('foydalanish: cat [fayl]'); return; }
+    const parts = resolve(args[1]); const node = getNode(parts);
+    if(!node){ print("cat: "+args[1]+": bunday fayl yo'q"); return; }
+    if(node.type==='dir'){ print('cat: '+args[1]+': bu papka'); return; }
+    print(node.content||''); return;
+  }
+  if(cmd==='find'){
+    let searchRoot=['home','user'], pattern='*';
+    for(let i=1;i<args.length;i++){
+      if(args[i]==='-name'){ pattern = args[i+1].replace(/^["']|["']$/g,''); i++; }
+      else if(args[i]==='/'){ searchRoot=[]; }
+      else if(!args[i].startsWith('-')){ searchRoot = resolve(args[i]); }
+    }
+    const node = getNode(searchRoot);
+    if(!node || node.type!=='dir'){ print("find: yo'l topilmadi"); return; }
+    const results=[]; findRec(node, pattern, '/'+searchRoot.join('/'), results);
+    if(results.length===0) print('hech narsa topilmadi'); else results.forEach(r=>print(r));
+    return;
+  }
+  if(cmd==='grep'){
+    let recursive=false, needle=null, searchRoot=['home','user'];
+    const rest = args.slice(1); let idx=0;
+    if(rest[0]==='-r'){ recursive=true; idx=1; }
+    needle = (rest[idx]||'').replace(/^["']|["']$/g,'');
+    if(rest[idx+1]){ searchRoot = rest[idx+1]==='/' ? [] : resolve(rest[idx+1]); }
+    if(!needle){ print("foydalanish: grep -r MATN [yo'l]"); return; }
+    const node = getNode(searchRoot);
+    if(!node){ print("grep: yo'l topilmadi"); return; }
+    const results=[];
+    if(!recursive && node.type==='file'){ (node.content||'').split('\n').forEach(l=>{ if(l.toLowerCase().includes(needle.toLowerCase())) results.push(l); }); }
+    else { grepRec(node, needle, '/'+searchRoot.join('/'), results); }
+    if(results.length===0) print('hech narsa topilmadi'); else results.forEach(r=>print(r));
+    return;
+  }
+  print(cmd+': buyruq topilmadi. "help" deb yozing.');
+}
+function focusInput(){ cmdIn.focus(); }
+cmdIn.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){ const v=cmdIn.value; cmdIn.value=''; runCommand(v); setTimeout(focusInput,0); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); if(histIdx>0){ histIdx--; cmdIn.value=cmdHistory[histIdx]||''; } }
+  else if(e.key==='ArrowDown'){ e.preventDefault(); if(histIdx<cmdHistory.length-1){ histIdx++; cmdIn.value=cmdHistory[histIdx]||''; } else { histIdx=cmdHistory.length; cmdIn.value=''; } }
+});
+document.getElementById('output').addEventListener('click', focusInput);
+document.getElementById('prompt-top').addEventListener('click', focusInput);
+document.getElementById('inputline').addEventListener('click', focusInput);
+</script>
 </body>
 </html>

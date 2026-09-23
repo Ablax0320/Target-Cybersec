@@ -78,6 +78,11 @@ tr.me{background:rgba(57,255,106,.06);}
 .line{margin:0 0 2px;}
 .prompt-c{color:var(--accent);}
 .flag-c{color:var(--warn);}
+body, .qtext, .qhead, #output .line, #prompt-top, .userchip, .flagformat, h1, .subtitle, table{ user-select:none; -webkit-user-select:none; -ms-user-select:none; }
+.flag-c{ user-select:text !important; -webkit-user-select:text !important; }
+input, #cmd{ user-select:text; -webkit-user-select:text; }
+#blur-guard{position:fixed; inset:0; background:var(--bg); z-index:999; display:none; align-items:center; justify-content:center; color:var(--err); font-size:15px; text-align:center; padding:20px;}
+#blur-guard.show{display:flex;}
 #prompt-top{padding:6px 14px 0; color:var(--accent); font-family:"Courier New",monospace; font-size:13.5px; cursor:text;}
 #inputline{display:flex; align-items:center; padding:0 14px 14px; gap:6px; cursor:text;}
 #inputline .p{color:var(--accent); white-space:nowrap; font-family:"Courier New",monospace;}
@@ -87,6 +92,7 @@ tr.me{background:rgba(57,255,106,.06);}
 </head>
 <body>
 <div id="toast-wrap"></div>
+<div id="blur-guard">Ekranni tark etmang / skrinshot urinishi aniqlandi.<br>Davom etish uchun sahifaga qayting.</div>
 <div class="container">
 
   <div id="name-screen" class="fade">
@@ -138,7 +144,28 @@ document.addEventListener('keydown', e=>{
   if(e.key === 'F12' || (e.ctrlKey && k==='u') || (e.ctrlKey && e.shiftKey && (k==='i'||k==='j'||k==='c'))){
     e.preventDefault();
   }
+  if((e.key === 'PrintScreen') || (e.metaKey && e.shiftKey && (k==='3'||k==='4'||k==='5'))){
+    showBlurGuard();
+  }
 });
+document.addEventListener('selectstart', e=>{
+  if(!e.target.closest('.flag-c') && !['INPUT','TEXTAREA'].includes(e.target.tagName)){ e.preventDefault(); }
+});
+document.addEventListener('copy', e=>{
+  const sel = window.getSelection();
+  const node = sel.anchorNode;
+  const inFlag = node && node.parentElement && node.parentElement.closest('.flag-c');
+  const active = document.activeElement;
+  const inInput = active && ['INPUT','TEXTAREA'].includes(active.tagName);
+  if(!inFlag && !inInput){ e.preventDefault(); }
+});
+function showBlurGuard(){
+  const g = document.getElementById('blur-guard');
+  g.classList.add('show');
+  setTimeout(()=>g.classList.remove('show'), 1800);
+}
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) showBlurGuard(); });
+window.addEventListener('blur', ()=>showBlurGuard());
 
 /* ---------- admin ---------- */
 const ADMIN_NAME = "ADMIN ADMIN"; // <-- shu yerga o'z Ism Familyangizni yozing (katta-kichik harf muhim emas)
@@ -165,12 +192,20 @@ const QUESTIONS = [
 /* ---------- yordamchi funksiyalar ---------- */
 function normName(n){ return n.trim().replace(/\s+/g,' '); }
 function nameKey(n){ return normName(n).toLowerCase(); }
-function hashStr(str){
-  let h = 5381;
-  for(let i=0;i<str.length;i++){ h = ((h<<5)+h) + str.charCodeAt(i); h = h & 0xffffffff; }
-  return (h>>>0).toString(36);
+function fnv1a(str){
+  let h = 0x811c9dc5;
+  for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return (h>>>0);
 }
-function flagFor(key, qnum){ return 'FLAG{'+hashStr(key+'_salt_ablax')+'_q'+qnum+'}'; }
+function flagFor(key, qnum){
+  // qnum har xil pozitsiyalarda va har xil tuzlar bilan aralashtiriladi,
+  // shuning uchun bitta savolning flagidan boshqasini taxmin qilib bo'lmaydi.
+  const s1 = qnum+'::'+key+'::ablaxSaltA7q'+(qnum*31+7);
+  const s2 = key+'::'+qnum+'::ablaxSaltB3q'+(qnum*17+3);
+  const s3 = key.split('').reverse().join('')+qnum+'ablaxSaltC9';
+  const token = fnv1a(s1).toString(36)+fnv1a(s2).toString(36)+fnv1a(s3).toString(36).slice(0,3);
+  return 'FLAG{'+token+'}';
+}
 function pointsForRank(rank){
   if(rank===1) return 100;
   if(rank===2) return 90;
